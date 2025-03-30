@@ -12,6 +12,17 @@ local function isCommandAvailable(command)
     return os.execute(command .. " --version 2>&1")
 end
 
+local function removeFile(path)
+    if not path then
+        return false
+    end
+    if app.os.name == "Windows" then
+        return os.execute(string.format('del "%s"', path))
+    elseif app.os.name == "Linux" or app.os.name == "macOS" then
+        return os.execute(string.format('rm "%s"', path))
+    end
+end
+
 local function findDownloader(command)
     if app.os.name == "Windows" then
         return 'powershell'
@@ -67,15 +78,40 @@ local function downloadFile(url, savePath)
     return false
 end
 
-local function downloadScript(url, category, targetName)
-    local scriptPath = app.fs.joinPath(packageManagerDir, category)
-    if not app.fs.isDirectory(scriptPath) then
-        app.fs.makeAllDirectories(scriptPath)
+-- in use for install and update (they are the same)
+local function installScript(url, scriptPath)
+    local scriptPathDir = app.fs.filePath(scriptPath)
+    if not app.fs.isDirectory(scriptPathDir) then
+        app.fs.makeAllDirectories(scriptPathDir)
     end
 
-    downloadFile(url, app.fs.joinPath(scriptPath, targetName))
+    downloadFile(url, scriptPath)
 
-    print("I cannot rescan the scripts directory press F5")
+    -- reload script dir
+    app.command.Refresh()
+
+    app.alert{title="Install Package", text="The package is installed", buttons="OK"}
+    return true
+end
+
+local function uninstallScript(scriptPath)
+    if not removeFile(scriptPath) then
+        app.alert("cannot remove the selected package")
+        return false
+    end
+
+    -- remove the dir when empty
+    local scriptPathDir = app.fs.filePath(scriptPath)
+    local otherScriptsInPath = app.fs.listFiles(scriptPathDir)
+    if #otherScriptsInPath == 0 then
+        app.fs.removeDirectory(scriptPathDir)
+    end
+
+    -- reload script dir
+    app.command.Refresh()
+
+    app.alert{title="Uninstall Package", text="The package is removed", buttons="OK"}
+    return true
 end
 
 local function readFileToString(filename)
@@ -87,6 +123,8 @@ local function readFileToString(filename)
     file:close()
     return content
 end
+
+local btnText = {}
 
 local function processMetaData(elm)
     if downloadFile(META_DATA_URI, metaDataPath) == false then
@@ -113,23 +151,60 @@ local function processMetaData(elm)
 
     local countPackages = #metaData
     for i, package in ipairs(metaData) do
+        local scriptPath = app.fs.joinPath(packageManagerDir, package.category, package.scriptName)
+
         elm:newrow({ always=true })
             :label({ label="Vendor", text=package.vendor })
             :label({ label="Name", text=package.name })
             :label({ label="Description", text=package.description })
             :label({ label="Version", text=package.version .. " (" .. package.commit .. ")" })
-            :button({
-            text="INSTALL",
+
+        local isInstalled = app.fs.isFile(scriptPath)
+
+        local btnId = "btnPackage" .. tostring(i)
+        btnText[btnId] = nil
+        if isInstalled then
+            btnText[btnId] = "UNINSTALL"
+        else
+            btnText[btnId] = "INSTALL"
+        end
+
+        elm:button({
+            id=btnId,
+            text=btnText[btnId],
             selected=false,
             focus=false,
             onclick=function()
-                downloadScript(package.url, package.category, package.scriptName)
-            end })
-            :button({
-                text="WEBSITE",
+
+                if btnText[btnId] == "INSTALL" then
+                    if installScript(package.url, scriptPath) then
+                        btnText[btnId] = "UNINSTALL" -- the new situation
+                    end
+                elseif btnText[btnId] == "UNINSTALL" then
+                    if uninstallScript(scriptPath) then
+                        btnText[btnId] = "INSTALL" -- the new situation
+                    end
+                end
+
+                dlg:modify({id=btnId, text=btnText[btnId]})
+            end 
+        })
+
+        if btnText[btnId] == "UNINSTALL" then
+            local btnPackageUpdateId = "btnPackageUpdate" .. tostring(i)
+            elm:button({
+                id=btnPackageUpdateId,
+                text="UPDATE",
                 selected=false,
                 focus=false,
-                onclick=function() end })
+                onclick=function()
+                    -- @todo update check
+                    if installScript(package.url, scriptPath) then
+                        dlg:modify({id=btnPackageUpdateId, text="UPDATED", visible = false})
+                    end
+                end 
+            })
+        end
 
         if i ~= countPackages then
             elm:separator()
@@ -177,6 +252,6 @@ dlg:endtabs({ id="wat",
 
 
 
-
-dlg:show{ wait=true, autoscrollbars=true }
-
+if app.isUIAvailable then
+    dlg:show{ wait=true, autoscrollbars=true }
+end
