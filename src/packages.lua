@@ -149,15 +149,16 @@ local function processMetaData(elm)
         return false
     end
 
-    local countPackages = #metaData
+  
     for i, package in ipairs(metaData) do
         local scriptPath = app.fs.joinPath(packageManagerDir, package.category, package.scriptName)
 
-        elm:newrow({ always=true })
-            :label({ label="Vendor", text=package.vendor })
-            :label({ label="Name", text=package.name })
-            :label({ label="Description", text=package.description })
-            :label({ label="Version", text=package.version .. " (" .. package.commit .. ")" })
+        elm
+        :separator(" " .. package.name .. " ")
+        --:newrow({ always=true })
+        :label({ label="Vendor", text=package.vendor })
+        :label({ label="Description", text=package.description })
+        :label({ label="Version", text=package.version .. " (" .. package.commit .. ")" })
 
         local isInstalled = app.fs.isFile(scriptPath)
 
@@ -205,52 +206,38 @@ local function processMetaData(elm)
                 end 
             })
         end
-
-        if i ~= countPackages then
-            elm:separator()
-        end
     end
 end
 
-dlg = Dialog({
-    title = "Package Manager"
-})
-local tabPackages = dlg:tab({ id="packages",
-        text="Packages",
-    --  onclick=function(ev) 
-    --     print("pressed tab: " .. ev.tab)
-    -- end
-        })
+dlg = Dialog({title = "Package Manager"})
+local tabPackages = dlg:tab({ id="packages", text="Packages"})
 
 -- Load everything, it is not possible to add elements inside the tab at a later moment (@bug)
 processMetaData(tabPackages)
 
-
-local tabSettings = dlg:tab({ id="settings",
-         text="Settings",
-        --  onclick=function(ev) 
-        --     print("pressed tab: " .. ev.tab)
-        -- end
-         })
-local tabAbout = dlg:tab({ id="about",
-    text="About",
-    -- onclick=function(ev) 
-    -- print("pressed tab: " .. ev.tab)
-    -- end
+dlg:tab({ id="about",text="About"})
+:separator(" ABOUT ")
+:label({ label="Made by", text="Martin" })
+:label({ label="Version", text="1.0.0" })
+:label({ label="Why?", text="Because I like to create things with LUA and help other people" })
+:separator(" SUPPORT ")
+:label({ label="", text="You can support me, i'm creating a pixel art adventure game" })
+:label({ label="Site", text="https://signalfromthestars.com" })
+:label({ label="Insta", text="https://www.instagram.com/signalfromthestars" })
+:label({ label="GitHub", text="https://github.com/SignalFromTheStars" })
+:separator(" BUGS ")
+:label({ label="Ooops", text="You can visit the the github page and/or try to update the Package Manager" })
+:separator()
+:button({
+    text="UPDATE",
+    selected=false,
+    focus=false,
+    onclick=function()
+        -- @todo update check
+    end 
 })
 
-dlg:endtabs({ id="wat",
-    text="wat",
-    -- onchange=function(ev)
-    --     print("selected tab: " .. ev.tab)
-    --  end 
-})
-
---          dlg:separator{ text="Page 1" }:entry{ label="Data 1", id="data1" }
--- dlg:separator()
-
-
-
+dlg:endtabs()
 
 if app.isUIAvailable then
     dlg:show{ wait=true, autoscrollbars=true }
