@@ -26,7 +26,7 @@
       devShell = pkgs.mkShell {
         buildInputs = with pkgs; [
           git
-          gnupg    # Dit is nu de aangepaste gnupg
+          gnupg
           pinentry_mac
         ];
 
