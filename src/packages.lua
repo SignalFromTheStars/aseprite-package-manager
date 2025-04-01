@@ -8,6 +8,12 @@ ScriptInfo = {
     remote = "https://github.com/SignalFromTheStars/aseprite-package-manager"
 }
 
+if not app.isUIAvailable then
+    return;
+end
+
+dlg = Dialog({title = "Package Manager"})
+
 local function isCommandAvailable(command)
     return os.execute(command .. " --version 2>&1")
 end
@@ -69,7 +75,6 @@ local function downloadFile(url, savePath)
     -- download the file
     local result = os.execute(command)
     if result then
-        -- print("Downloaded to: " .. savePath)
         return true
     else
         app.alert("Download Failed")
@@ -89,8 +94,6 @@ local function installScript(url, scriptPath)
 
     -- reload script dir
     app.command.Refresh()
-
-    app.alert{title="Install Package", text="The package is installed", buttons="OK"}
     return true
 end
 
@@ -109,8 +112,6 @@ local function uninstallScript(scriptPath)
 
     -- reload script dir
     app.command.Refresh()
-
-    app.alert{title="Uninstall Package", text="The package is removed", buttons="OK"}
     return true
 end
 
@@ -126,7 +127,50 @@ end
 
 local btnText = {}
 
-local function processMetaData(elm)
+local function getKeys(tbl)
+    if tbl == nil then 
+        return {}
+    end
+    local keys = {}
+    for key, _ in pairs(tbl) do
+        table.insert(keys, key)
+    end
+    return keys
+end
+
+local function updateInfo(id, package)
+    -- reset
+    -- dlg:modify({id="vendor".. id, text=""})
+    -- dlg:modify({id="description" .. id, text=""})
+    -- dlg:modify({id="version" .. id, text=""})
+    -- dlg:modify({id="action" .. id, text="", visible = false})
+
+    if not package then
+        return
+    end
+
+    dlg:modify({id="vendor" .. id, text=package.vendor})
+    dlg:modify({id="description" .. id, text=package.description})
+    dlg:modify({id="version" .. id, text=package.version})
+
+    if package.isInstalled then
+        dlg:modify({id="action" .. id, text="UNINSTALL", visible = true})
+    else
+        dlg:modify({id="action" .. id, text="INSTALL", visible = true})
+    end
+
+end
+
+local packagesInstallOptions = {}
+local packagesUninstallOptions = {}
+local packagesUpdateOptions = {}
+
+local function processMetaData()
+    -- reset
+    packagesInstallOptions = {}
+    packagesUninstallOptions = {}
+    packagesUpdateOptions = {}
+
     if downloadFile(META_DATA_URI, metaDataPath) == false then
         app.alert("Cannot download the meta data, try again later")
         return false
@@ -149,71 +193,92 @@ local function processMetaData(elm)
         return false
     end
 
-  
     for i, package in ipairs(metaData) do
-        local scriptPath = app.fs.joinPath(packageManagerDir, package.category, package.scriptName)
+        package.scriptPath = app.fs.joinPath(packageManagerDir, package.category, package.scriptName)
+        package.isInstalled = app.fs.isFile(package.scriptPath)
 
-        elm
-        :separator(" " .. package.name .. " ")
-        --:newrow({ always=true })
-        :label({ label="Vendor", text=package.vendor })
-        :label({ label="Description", text=package.description })
-        :label({ label="Version", text=package.version .. " (" .. package.commit .. ")" })
-
-        local isInstalled = app.fs.isFile(scriptPath)
-
-        local btnId = "btnPackage" .. tostring(i)
-        btnText[btnId] = nil
-        if isInstalled then
-            btnText[btnId] = "UNINSTALL"
+        local keyName = package.vendor .. " : " .. package.name
+        if package.isInstalled then 
+            packagesUninstallOptions[keyName] = package
         else
-            btnText[btnId] = "INSTALL"
-        end
-
-        elm:button({
-            id=btnId,
-            text=btnText[btnId],
-            selected=false,
-            focus=false,
-            onclick=function()
-
-                if btnText[btnId] == "INSTALL" then
-                    if installScript(package.url, scriptPath) then
-                        btnText[btnId] = "UNINSTALL" -- the new situation
-                    end
-                elseif btnText[btnId] == "UNINSTALL" then
-                    if uninstallScript(scriptPath) then
-                        btnText[btnId] = "INSTALL" -- the new situation
-                    end
-                end
-
-                dlg:modify({id=btnId, text=btnText[btnId]})
-            end 
-        })
-
-        if btnText[btnId] == "UNINSTALL" then
-            local btnPackageUpdateId = "btnPackageUpdate" .. tostring(i)
-            elm:button({
-                id=btnPackageUpdateId,
-                text="UPDATE",
-                selected=false,
-                focus=false,
-                onclick=function()
-                    -- @todo update check
-                    if installScript(package.url, scriptPath) then
-                        dlg:modify({id=btnPackageUpdateId, text="UPDATED", visible = false})
-                    end
-                end 
-            })
+            packagesInstallOptions[keyName] = package 
         end
     end
 end
 
-dlg = Dialog({title = "Package Manager"})
-local tabPackages = dlg:tab({ id="packages", text="Packages"})
+local function setTabName(id, options)
+    if id == "packages" then
+        return "Packages (" .. #getKeys(options) .. ")"
+    elseif id == "updates" then
+        return "Updates (" .. #getKeys(options) .. ")"
+    elseif id == "installed" then
+        return "Installed (" .. #getKeys(options) .. ")"
+    end
+end
 
--- Load everything, it is not possible to add elements inside the tab at a later moment (@bug)
-processMetaData(tabPackages)
+
+-- type == package , updates, instal
+local function uiTab(id, options)
+    
+    dlg:combobox({
+        id = id,
+        option = "",
+        options = {"", table.unpack(getKeys(options))},
+        onchange=function(e)
+            if id == "package" then
+                updateInfo(id, options[dlg.data.package])
+            elseif id == "updates" then
+                updateInfo(id, options[dlg.data.updates])
+            elseif id == "installed" then
+                updateInfo(id, options[dlg.data.installed])
+            end
+        end
+    })
+
+    dlg:separator()
+    dlg:label({ id="vendor" .. id, label="Vendor", text="", visible = true })
+    dlg:label({ id="description" .. id, label="Description", text="", visible = true })
+    dlg:label({ id="version" .. id, label="Version", text="", visible = true })
+    dlg:button({
+        id="action" .. id,
+        text="",
+        selected=false,
+        focus=false,
+        visible=false,
+        onclick=function()
+            if id == "package" then
+                local package = options[dlg.data.package]
+                if not installScript(package.url, package.scriptPath) then
+                    return
+                end
+                app.alert{title="Install Package", text="The package is installed", buttons="OK"}
+            elseif id == "updates" then
+               -- @todo
+            elseif id == "installed" then
+                local package = options[dlg.data.installed]
+                if not uninstallScript(package.scriptPath) then
+                    return
+                end
+                app.alert{title="Uninstall Package", text="The package is removed", buttons="OK"}
+            end
+
+            -- refresh the whole window
+            dlg:close()
+            app.command.RunScript({filename = app.fs.joinPath(scriptsDir, "packages.lua") })
+        end 
+    })
+end
+
+processMetaData()
+
+dlg:tab({ id="packages", text=setTabName("packages", packagesInstallOptions)})
+uiTab("package", packagesInstallOptions)
+
+dlg:tab({ id="updates", text=setTabName("updates", packagesUpdateOptions)})
+uiTab("updates", packagesUpdateOptions)
+
+dlg:tab({ id="installed", text=setTabName("installed", packagesUninstallOptions)})
+uiTab("installed", packagesUninstallOptions)
 
 dlg:tab({ id="about",text="About"})
 :separator(" ABOUT ")
@@ -239,6 +304,4 @@ dlg:tab({ id="about",text="About"})
 
 dlg:endtabs()
 
-if app.isUIAvailable then
-    dlg:show{ wait=true, autoscrollbars=true }
-end
+dlg:show{ wait=true, autoscrollbars=true }
