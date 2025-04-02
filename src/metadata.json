@@ -1,5 +1,15 @@
 [
     {
+        "name": "Package Mangager",
+        "vendor": "Signal From The Stars",
+        "productUrl": "https://github.com/SignalFromTheStars/aseprite-package-manager",
+        "downloadUrl": "file:////Users/diana/Documents/MvB/aseprite-package-manager/src/packages.lua",
+        "scriptName": "Packages2.lua",
+        "version": "1.0.0",
+        "license": "MIT",
+        "description": "This Package Manager"
+    },
+    {
         "name": "Glass Floor",
         "vendor": "Aseprite",
         "productUrl": "https://www.aseprite.org",
@@ -8,8 +18,7 @@
         "category": "Pattern",
         "version": "1.0.0",
         "license": "MIT",
-        "description": "Creates a new layer that looks like a glass floor flattening in the timeline.",
-        "removed": false
+        "description": "Creates a new layer that looks like a glass floor flattening in the timeline."
     },
     {
         "name": "Random Pallette",
@@ -17,10 +26,9 @@
         "downloadUrl": "https://raw.githubusercontent.com/aseprite/Aseprite-Script-Examples/refs/heads/main/Random%20Palette.lua",
         "scriptName": "Random Pallet.lua",
         "category": "Color",
-        "version": "1.0.1",
+        "version": "1.0.0",
         "license": "MIT",
-        "description": "Randomize colors in the palette.",
-        "removed": false
+        "description": "Randomize colors in the palette."
     },
     {
         "name": "Virtual Camera Export System",
@@ -29,7 +37,6 @@
         "category": "Animation",
         "version": "1.0.0",
         "license": "Simple Usage License",
-        "description": "Movable camera view on the action over the course of the animation.",
-        "removed": false
+        "description": "Movable camera view on the action over the course of the animation."
     }
 ]

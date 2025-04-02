@@ -1,11 +1,10 @@
 # TODO
-[ ] updates
-[ ] website url meta data
-[ ] not possible to download anymore (only localhost)
-[ ] linter
-[ ] update package manager (test to put it into metadata.json)
-[ ] packager manager about (update!) 
-[ ] install all option
-[ ] tab submit link
-[ ] test windows
-[ ] test ubuntu
+- [x] updates
+- [x] website url meta data
+- [ ] not possible to download anymore (only localhost)
+- [ ] linter
+- [x] update package manager
+- [ ] submit package
+- [ ] tab submit package
+- [ ] test windows
+- [ ] test ubuntu

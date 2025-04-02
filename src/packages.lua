@@ -107,7 +107,7 @@ local function installScript(package)
     if downloadFile(package.downloadUrl, package.scriptPath) then
         -- create local meta data
         local file = io.open(package.scriptPath .. ".json", 'w+')
-        file:write(json.encode({version = package.version}))
+        file:write(json.encode(package))
         file:close()
     end
 
@@ -128,7 +128,7 @@ local function uninstallScript(package)
     -- remove the dir when empty
     local scriptPathDir = app.fs.filePath(package.scriptPath)
     local otherScriptsInPath = app.fs.listFiles(scriptPathDir)
-    if #otherScriptsInPath == 0 then
+    if #otherScriptsInPath == 0 and scriptsDir ~= scriptPathDir then
         app.fs.removeDirectory(scriptPathDir)
     end
 
@@ -172,18 +172,25 @@ local function updateInfo(id, package)
         return
     end
 
-    dlg:modify({id="vendor" .. id, text=package.vendor, visible = (package.vendor)})
-    dlg:modify({id="description" .. id, text=package.description, visible = (package.description)})
-    dlg:modify({id="version" .. id, text=package.version, visible = (package.version)})
-    dlg:modify({id="productUrl" .. id, visible = (package.productUrl)}) 
+    local data = package
     if package.isInstalled then
-        if package.haveUpdate then
-            dlg:modify({id="action" .. id, text="UPDATE", visible = (package.downloadUrl)})
-        else 
-            dlg:modify({id="action" .. id, text="UNINSTALL", visible = (package.downloadUrl)})
+        data = package.localData
+    end
+
+    dlg:modify({id="vendor" .. id, text=data.vendor, visible = (data.vendor)})
+    dlg:modify({id="description" .. id, text=data.description, visible = (data.description)})
+    dlg:modify({id="version" .. id, text=package.version, visible = (package.version)})
+    dlg:modify({id="localVersion" .. id, text=data.version, visible = (data.version)})
+    dlg:modify({id="productUrl" .. id, visible = (data.productUrl)})
+
+    if id == "installed" or id == "package" then
+        if package.isInstalled then
+            dlg:modify({id="action" .. id, text="UNINSTALL", visible = (data.downloadUrl)})
+        else
+            dlg:modify({id="action" .. id, text="INSTALL", visible = (data.downloadUrl)})
         end
-    else
-        dlg:modify({id="action" .. id, text="INSTALL", visible = (package.downloadUrl)})
+    elseif id == "updates" then
+        dlg:modify({id="action" .. id, text="UPDATE", visible = (data.downloadUrl)})
     end
 end
 
@@ -219,28 +226,48 @@ local function processMetaData()
         return false
     end
 
-    for i, package in ipairs(metaData) do
-        package.scriptPath = app.fs.joinPath(packageManagerDir, package.category, package.scriptName)
-        package.isInstalled = app.fs.isFile(package.scriptPath)
-        package.haveUpdate = false
+    for i, pkg in ipairs(metaData) do
+        local packageScriptPath = app.fs.joinPath(packageManagerDir, pkg.category, pkg.scriptName)
+        if pkg.name == "Package Mangager" then
+            -- special case
+            packageScriptPath = app.fs.joinPath(scriptsDir, pkg.scriptName)
+        end
 
-        local keyName = package.vendor .. " : " .. package.name
-        if package.isInstalled then 
-            packagesUninstallOptions[keyName] = package
+        -- create a new object
+        local packageData = {
+            -- json
+            name = pkg.name,
+            vendor = pkg.vendor,
+            downloadUrl = pkg.downloadUrl,
+            scriptName = pkg.scriptName,
+            category = pkg.category,
+            version = pkg.version,
+            license = pkg.license,
+            description = pkg.description,
+            -- extend
+            keyName = pkg.vendor .. " : " .. pkg.name,
+            scriptPath = packageScriptPath,
+            isInstalled = app.fs.isFile(packageScriptPath),
+            haveUpdate = false,
+            localData = {},
+        }
 
+        if packageData.isInstalled then
             -- maybe this package do have a update
-            local localPackageMetaDataJson = readFileToString(package.scriptPath .. ".json")
+            local localPackageMetaDataJson = readFileToString(packageData.scriptPath .. ".json")
             if localPackageMetaDataJson then
-                local localPackageMetaData= json.decode(localPackageMetaDataJson)
-                if localPackageMetaData then
-                    if package.version and localPackageMetaData.version ~= package.version then
-                        packagesUpdateOptions[keyName] = package
-                        package.haveUpdate = true
+                packageData.localData = json.decode(localPackageMetaDataJson)
+                if packageData.localData then           
+                    -- maybe it have a update
+                    if pkg.version and packageData.localData and packageData.localData.version ~= pkg.version then
+                        packagesUpdateOptions[packageData.keyName] = packageData
+                        packageData.haveUpdate = true
                     end
                 end
             end
+            packagesUninstallOptions[packageData.keyName] = packageData
         else
-            packagesInstallOptions[keyName] = package 
+            packagesInstallOptions[packageData.keyName] = packageData 
         end
     end
 end
@@ -270,7 +297,8 @@ local function uiTab(id, options)
     dlg:separator()
     dlg:label({ id="vendor" .. id, label="Vendor", text="", visible = false })
     dlg:label({ id="description" .. id, label="Description", text="", visible = false })            
-    dlg:label({ id="version" .. id, label="Version", text="", visible = false })
+    dlg:label({ id="localVersion" .. id, label="Local version", text="", visible = false })
+    dlg:label({ id="version" .. id, label="Remote version", text="", visible = false })
     dlg:button({
         id="action" .. id,
         text="",
@@ -330,20 +358,35 @@ dlg:tab({ id="about",text="About"})
 :label({ label="Why?", text="Because I like to create things with LUA and help other people" })
 :separator(" SUPPORT ")
 :label({ label="", text="You can support me, i'm creating a pixel art adventure game" })
-:label({ label="Site", text="https://signalfromthestars.com" })
-:label({ label="Insta", text="https://www.instagram.com/signalfromthestars" })
-:label({ label="GitHub", text="https://github.com/SignalFromTheStars" })
-:separator(" BUGS ")
-:label({ label="Ooops", text="You can visit the the github page and/or try to update the Package Manager" })
-:separator()
+dlg:newrow{ always=true }
 :button({
-    text="UPDATE",
+    text="https://signalfromthestars.com",
     selected=false,
     focus=false,
     onclick=function()
-        -- @todo update check
+        openBrowser("https://signalfromthestars.com")
     end 
 })
+dlg:newrow{ always=true }
+:button({
+    text="https://www.instagram.com/signalfromthestars" ,
+    selected=false,
+    focus=false,
+    onclick=function()
+        openBrowser("https://www.instagram.com/signalfromthestars")
+    end 
+})
+:separator(" BUGS ")
+:label({ label="", text="Visit the the github page and/or try to update the Package Manager" })
+:button({
+    text="https://github.com/SignalFromTheStars",
+    selected=false,
+    focus=false,
+    onclick=function()
+        openBrowser("https://github.com/SignalFromTheStars/aseprite-package-manager")
+    end 
+})
+
 
 dlg:endtabs()
 
