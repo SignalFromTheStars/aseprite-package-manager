@@ -137,6 +137,29 @@ local function downloadFile(url, savePath)
     return false
 end
 
+local function postRequest(url, jsonStr)
+    local command
+
+    if DOWNLOADER == "powershell" then
+        command = string.format('powershell -Command "Invoke-RestMethod -Uri \"%s\" -Method Post -Body %s -ContentType \"application/json\""', url, jsonStr)
+    elseif DOWNLOADER == "curl" then
+        command = string.format("curl -X POST -H 'Content-Type: application/json' -d '%s' '%s'", jsonStr, url)
+    else 
+        app.alert("Cannot find a POST request tool like `curl`, or `powershell`, see the about tab and use git pull request")
+        return
+    end
+
+    local result = os.execute(command)
+    if result then
+        return true
+    else
+        app.alert("POST Request Failed")
+    end
+
+    return false
+end
+
+
 -- in use for install and update (they are the same)
 local function installScript(package)
     local scriptPathDir = app.fs.filePath(package.scriptPath)
@@ -223,6 +246,7 @@ end
 local packagesInstallOptions = {}
 local packagesUninstallOptions = {}
 local packagesUpdateOptions = {}
+local categories = {}
 
 local function processMetaData()
     -- reset
@@ -258,6 +282,9 @@ local function processMetaData()
             -- special case
             packageScriptPath = app.fs.joinPath(scriptsDir, pkg.scriptName)
         end
+
+        -- for other processing
+        table.insert(categories, pkg.category)
 
         -- create a new object
         local packageData = {
@@ -401,6 +428,67 @@ dlg:tab({ id="settings",text="Settings"})
 
 
 
+dlg:tab({ id="submit",text="Submit"})
+:entry({ id = "submitVendor", label="Vendor*", text = ""})
+:entry({ id = "submitName", label="Name*", text = ""})
+:entry({ id = "submitProductUrl", label="Product url", text = "https://{SOMETHING}"})
+:entry({ id = "submitDownloadUrl", label="Script download url", text = "https://{SOMETHING}.lua"})
+:entry({ id = "submitScriptName", label="Script name", text = "{SOMETHING}.lua"})
+:entry({ id = "submitCategory", label="Category", text = ""})
+:entry({ id = "submitVersion", label="Version", text = "x.y.z"})
+:entry({ id = "submitLicense", label="License", text = ""})
+:entry({ id = "submitDescription", label="Description*", text = ""})
+:entry({ id = "submitEmail", label="Email*", text = ""})
+:button({
+    text="Submit Package",
+    selected=false,
+    focus=false,
+    onclick=function()
+        if dlg.data.submitVendor == "" then
+            app.alert("Vendor is needed")
+            return
+        end
+        if dlg.data.submitName == "" then
+            app.alert("Name is needed")
+            return
+        end
+        if dlg.data.submitEmail == "" then
+            app.alert("Email is needed")
+            return
+        end
+        if dlg.data.submitProductUrl == "" and dlg.data.submitDownloadUrl == "" then
+            app.alert("You need to use a product url AND/OR a download url.")
+            return
+        end
+
+        if postRequest("https://signalfromthestars.com/aseprite-submit-package.php", json.encode({
+            vendor = dlg.data.submitVendor,
+            name = dlg.data.submitName,
+            productUrl = dlg.data.submitProductUrl,
+            downloadUrl = dlg.data.submitDownloadUrl,
+            scriptName = dlg.data.submitScriptName,
+            category = dlg.data.submitCategory,
+            version = dlg.data.submitVersion,
+            license = dlg.data.submitLicense,
+            description = dlg.data.submitDescription,
+            email = dlg.data.submitEmail 
+        })) then
+            dlg:modify({ id = "submitVendor", text = ""})
+            :modify({ id = "submitName", text = ""})
+            :modify({ id = "submitProductUrl", text = "https://{SOMETHING}"})
+            :modify({ id = "submitDownloadUrl", text = "https://{SOMETHING}.lua"})
+            :modify({ id = "submitScriptName", text = "{SOMETHING}.lua"})
+            :modify({ id = "submitCategory", text = ""})
+            :modify({ id = "submitVersion", text = "x.y.z"})
+            :modify({ id = "submitLicense", text = ""})
+            :modify({ id = "submitDescription", text = ""})
+            :modify({ id = "submitEmail", text = ""})
+
+            app.alert("Your package is submitted")
+        end
+    end
+})
+
 dlg:tab({ id="about",text="About"})
 :separator(" ABOUT ")
 :label({ label="Made by", text="Martin" })
@@ -436,7 +524,6 @@ dlg:newrow{ always=true }
         openBrowser("https://github.com/SignalFromTheStars/aseprite-package-manager")
     end 
 })
-
 
 dlg:endtabs()
 
