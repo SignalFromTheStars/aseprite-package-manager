@@ -18,6 +18,20 @@ local function isCommandAvailable(command)
     return os.execute(command .. " --version 2>&1")
 end
 
+local function openBrowser(url)
+    local command
+    if app.os.name == "Windows" then
+        command = string.format('start "" "%s"', url)
+    elseif app.os.name == "Linux" then
+        command = string.format('xdg-open "%s"', url)
+    elseif app.os.name == "macOS" then
+        command = string.format('open "%s"', url)
+    end
+    if command then
+        os.execute(command)
+    end
+end
+
 local function removeFile(path)
     if not path then
         return false
@@ -84,27 +98,35 @@ local function downloadFile(url, savePath)
 end
 
 -- in use for install and update (they are the same)
-local function installScript(url, scriptPath)
-    local scriptPathDir = app.fs.filePath(scriptPath)
+local function installScript(package)
+    local scriptPathDir = app.fs.filePath(package.scriptPath)
     if not app.fs.isDirectory(scriptPathDir) then
         app.fs.makeAllDirectories(scriptPathDir)
     end
 
-    downloadFile(url, scriptPath)
+    if downloadFile(package.downloadUrl, package.scriptPath) then
+        -- create local meta data
+        local file = io.open(package.scriptPath .. ".json", 'w+')
+        file:write(json.encode({version = package.version}))
+        file:close()
+    end
 
     -- reload script dir
     app.command.Refresh()
     return true
 end
 
-local function uninstallScript(scriptPath)
-    if not removeFile(scriptPath) then
+local function uninstallScript(package)
+    if not removeFile(package.scriptPath) then
         app.alert("cannot remove the selected package")
         return false
     end
 
+    -- remove the local metadata
+    removeFile(package.scriptPath .. ".json") 
+    
     -- remove the dir when empty
-    local scriptPathDir = app.fs.filePath(scriptPath)
+    local scriptPathDir = app.fs.filePath(package.scriptPath)
     local otherScriptsInPath = app.fs.listFiles(scriptPathDir)
     if #otherScriptsInPath == 0 then
         app.fs.removeDirectory(scriptPathDir)
@@ -140,25 +162,29 @@ end
 
 local function updateInfo(id, package)
     -- reset
-    -- dlg:modify({id="vendor".. id, text=""})
-    -- dlg:modify({id="description" .. id, text=""})
-    -- dlg:modify({id="version" .. id, text=""})
-    -- dlg:modify({id="action" .. id, text="", visible = false})
+    dlg:modify({id="vendor".. id, text="", visible = false})
+    dlg:modify({id="description" .. id, text="", visible = false})
+    dlg:modify({id="version" .. id, text="", visible = false})
+    dlg:modify({id="action" .. id, text="", visible = false})
+    dlg:modify({id="productUrl" .. id, visible = false})
 
     if not package then
         return
     end
 
-    dlg:modify({id="vendor" .. id, text=package.vendor})
-    dlg:modify({id="description" .. id, text=package.description})
-    dlg:modify({id="version" .. id, text=package.version})
-
+    dlg:modify({id="vendor" .. id, text=package.vendor, visible = (package.vendor)})
+    dlg:modify({id="description" .. id, text=package.description, visible = (package.description)})
+    dlg:modify({id="version" .. id, text=package.version, visible = (package.version)})
+    dlg:modify({id="productUrl" .. id, visible = (package.productUrl)}) 
     if package.isInstalled then
-        dlg:modify({id="action" .. id, text="UNINSTALL", visible = true})
+        if package.haveUpdate then
+            dlg:modify({id="action" .. id, text="UPDATE", visible = (package.downloadUrl)})
+        else 
+            dlg:modify({id="action" .. id, text="UNINSTALL", visible = (package.downloadUrl)})
+        end
     else
-        dlg:modify({id="action" .. id, text="INSTALL", visible = true})
+        dlg:modify({id="action" .. id, text="INSTALL", visible = (package.downloadUrl)})
     end
-
 end
 
 local packagesInstallOptions = {}
@@ -196,10 +222,23 @@ local function processMetaData()
     for i, package in ipairs(metaData) do
         package.scriptPath = app.fs.joinPath(packageManagerDir, package.category, package.scriptName)
         package.isInstalled = app.fs.isFile(package.scriptPath)
+        package.haveUpdate = false
 
         local keyName = package.vendor .. " : " .. package.name
         if package.isInstalled then 
             packagesUninstallOptions[keyName] = package
+
+            -- maybe this package do have a update
+            local localPackageMetaDataJson = readFileToString(package.scriptPath .. ".json")
+            if localPackageMetaDataJson then
+                local localPackageMetaData= json.decode(localPackageMetaDataJson)
+                if localPackageMetaData then
+                    if package.version and localPackageMetaData.version ~= package.version then
+                        packagesUpdateOptions[keyName] = package
+                        package.haveUpdate = true
+                    end
+                end
+            end
         else
             packagesInstallOptions[keyName] = package 
         end
@@ -216,29 +255,22 @@ local function setTabName(id, options)
     end
 end
 
-
--- type == package , updates, instal
+-- id == package , updates, installed
 local function uiTab(id, options)
-    
     dlg:combobox({
         id = id,
+        label = "Package",
         option = "",
         options = {"", table.unpack(getKeys(options))},
         onchange=function(e)
-            if id == "package" then
-                updateInfo(id, options[dlg.data.package])
-            elseif id == "updates" then
-                updateInfo(id, options[dlg.data.updates])
-            elseif id == "installed" then
-                updateInfo(id, options[dlg.data.installed])
-            end
+            updateInfo(id, options[dlg.data[id]])
         end
     })
 
     dlg:separator()
-    dlg:label({ id="vendor" .. id, label="Vendor", text="", visible = true })
-    dlg:label({ id="description" .. id, label="Description", text="", visible = true })
-    dlg:label({ id="version" .. id, label="Version", text="", visible = true })
+    dlg:label({ id="vendor" .. id, label="Vendor", text="", visible = false })
+    dlg:label({ id="description" .. id, label="Description", text="", visible = false })            
+    dlg:label({ id="version" .. id, label="Version", text="", visible = false })
     dlg:button({
         id="action" .. id,
         text="",
@@ -246,17 +278,19 @@ local function uiTab(id, options)
         focus=false,
         visible=false,
         onclick=function()
+            local package = options[dlg.data[id]]
             if id == "package" then
-                local package = options[dlg.data.package]
-                if not installScript(package.url, package.scriptPath) then
+                if not installScript(package) then
                     return
                 end
                 app.alert{title="Install Package", text="The package is installed", buttons="OK"}
             elseif id == "updates" then
-               -- @todo
+                if not installScript(package) then
+                    return
+                end
+                app.alert{title="Update Package", text="The package is updated", buttons="OK"}
             elseif id == "installed" then
-                local package = options[dlg.data.installed]
-                if not uninstallScript(package.scriptPath) then
+                if not uninstallScript(package) then
                     return
                 end
                 app.alert{title="Uninstall Package", text="The package is removed", buttons="OK"}
@@ -265,6 +299,15 @@ local function uiTab(id, options)
             -- refresh the whole window
             dlg:close()
             app.command.RunScript({filename = app.fs.joinPath(scriptsDir, "packages.lua") })
+        end 
+    })
+    dlg:button({
+        id="productUrl" .. id,
+        text="Webpage",
+        visible=false,
+        onclick=function()
+            local package = options[dlg.data[id]]
+            openBrowser(package.productUrl)
         end 
     })
 end

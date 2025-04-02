@@ -2,24 +2,34 @@
     {
         "name": "Glass Floor",
         "vendor": "Aseprite",
-        "url": "https://raw.githubusercontent.com/aseprite/Aseprite-Script-Examples/refs/heads/main/Glass%20Floor.lua",
+        "productUrl": "https://www.aseprite.org",
+        "downloadUrl": "https://raw.githubusercontent.com/aseprite/Aseprite-Script-Examples/refs/heads/main/Glass%20Floor.lua",
         "scriptName": "Glass Floor.lua",
         "category": "Pattern",
         "version": "1.0.0",
-        "commit": "93362b3",
         "license": "MIT",
-        "description": "Creates a new layer that looks like a glass floor flattening the selected layers in the timeline."
+        "description": "Creates a new layer that looks like a glass floor flattening in the timeline.",
+        "removed": false
     },
     {
         "name": "Random Pallette",
         "vendor": "Aseprite",
-        "url": "https://raw.githubusercontent.com/aseprite/Aseprite-Script-Examples/refs/heads/main/Random%20Palette.lua",
+        "downloadUrl": "https://raw.githubusercontent.com/aseprite/Aseprite-Script-Examples/refs/heads/main/Random%20Palette.lua",
         "scriptName": "Random Pallet.lua",
         "category": "Color",
-        "version": "1.0.0",
-        "commit": "b927296",
+        "version": "1.0.1",
         "license": "MIT",
         "description": "Randomize colors in the palette.",
-        "removed": "maybe installed local, but not possible to download again"
+        "removed": false
+    },
+    {
+        "name": "Virtual Camera Export System",
+        "vendor": "CarbsCode",
+        "productUrl": "https://carbscode.itch.io/vcam",
+        "category": "Animation",
+        "version": "1.0.0",
+        "license": "Simple Usage License",
+        "description": "Movable camera view on the action over the course of the animation.",
+        "removed": false
     }
 ]
