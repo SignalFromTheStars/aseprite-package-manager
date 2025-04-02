@@ -3,16 +3,9 @@
 -- version: 1.0.0
 -- remote: https://github.com/SignalFromTheStars/aseprite-package-manager
 ------------------------------------------------------------
-ScriptInfo = {
-    version = Version("1.0.0"),
-    remote = "https://github.com/SignalFromTheStars/aseprite-package-manager"
-}
-
 if not app.isUIAvailable then
-    return;
+    return
 end
-
-dlg = Dialog({title = "Package Manager"})
 
 local function isCommandAvailable(command)
     return os.execute(command .. " --version 2>&1")
@@ -58,18 +51,65 @@ local function findDownloader(command)
     end
 end
 
---local META_DATA_URI = "https://github.com/SignalFromTheStars/aseprite-package-manager/metadata.json"
-local META_DATA_URI = "file:////Users/diana/Documents/MvB/aseprite-package-manager/src/metadata.json"
-local DOWNLOADER = findDownloader()
+local function saveStringToFile(filename, str, mode)
+    local file = io.open(filename, mode)
+    file:write(str)
+    file:close()
+end
+
+local function readFileToString(filename)
+    local file = io.open(filename, "r")
+    if not file then
+        return false
+    end
+    local content = file:read("*all") 
+    file:close()
+    return content
+end
+
+local function readJson(filename)
+    local stringJson = readFileToString(filename)
+    if stringJson then
+        return json.decode(stringJson)
+    end
+end
+
 local scriptsDir = app.fs.joinPath(app.fs.userConfigPath, "scripts")
 if not app.fs.isDirectory(scriptsDir) then
     app.alert("Cannot find the scripts dir")
     return
 end
+
 local packageManagerDir = app.fs.joinPath(scriptsDir, "Package Manager") 
 if not app.fs.isDirectory(packageManagerDir) then
     app.fs.makeDirectory(packageManagerDir)
 end
+
+packageManagerSettingsPath = app.fs.joinPath(packageManagerDir, "settings.json")
+local SETTINGS = readJson(packageManagerSettingsPath)
+if not SETTINGS then
+    -- create default settings
+    SETTINGS = {
+        metaDataUri = "file:////Users/diana/Documents/MvB/aseprite-package-manager/src/metadata.json",
+        didAcceptWarning = false
+    }
+    saveStringToFile(packageManagerSettingsPath, json.encode(SETTINGS), 'w+')
+end
+
+if not SETTINGS.didAcceptWarning then
+    local result = app.alert{ title="Warning",
+        text="Do you understand that the external scripts installed with this may be harmful?",
+        buttons={"Yes", "No"}}
+    if result ~= 1 then
+        dlg:close()
+        return
+    end
+    SETTINGS.didAcceptWarning = true
+    saveStringToFile(packageManagerSettingsPath, json.encode(SETTINGS), 'w+')
+end
+
+local DOWNLOADER = findDownloader()
+
 local metaDataPath = app.fs.joinPath(packageManagerDir, "metadata.json")
 
 local function downloadFile(url, savePath)
@@ -106,9 +146,7 @@ local function installScript(package)
 
     if downloadFile(package.downloadUrl, package.scriptPath) then
         -- create local meta data
-        local file = io.open(package.scriptPath .. ".json", 'w+')
-        file:write(json.encode(package))
-        file:close()
+        saveStringToFile(package.scriptPath .. ".json", json.encode(package), 'w+')
     end
 
     -- reload script dir
@@ -136,18 +174,6 @@ local function uninstallScript(package)
     app.command.Refresh()
     return true
 end
-
-local function readFileToString(filename)
-    local file = io.open(filename, "r")
-    if not file then
-        return false
-    end
-    local content = file:read("*all") 
-    file:close()
-    return content
-end
-
-local btnText = {}
 
 local function getKeys(tbl)
     if tbl == nil then 
@@ -204,7 +230,7 @@ local function processMetaData()
     packagesUninstallOptions = {}
     packagesUpdateOptions = {}
 
-    if downloadFile(META_DATA_URI, metaDataPath) == false then
+    if downloadFile(SETTINGS.metaDataUri, metaDataPath) == false then
         app.alert("Cannot download the meta data, try again later")
         return false
     end
@@ -282,6 +308,11 @@ local function setTabName(id, options)
     end
 end
 
+local function reloadWindow()
+    dlg:close()
+    app.command.RunScript({filename = app.fs.joinPath(scriptsDir, "packages.lua") })
+end
+
 -- id == package , updates, installed
 local function uiTab(id, options)
     dlg:combobox({
@@ -324,9 +355,7 @@ local function uiTab(id, options)
                 app.alert{title="Uninstall Package", text="The package is removed", buttons="OK"}
             end
 
-            -- refresh the whole window
-            dlg:close()
-            app.command.RunScript({filename = app.fs.joinPath(scriptsDir, "packages.lua") })
+            reloadWindow()
         end 
     })
     dlg:button({
@@ -342,6 +371,7 @@ end
 
 processMetaData()
 
+dlg = Dialog({title = "Package Manager"})
 dlg:tab({ id="packages", text=setTabName("packages", packagesInstallOptions)})
 uiTab("package", packagesInstallOptions)
 
@@ -350,6 +380,26 @@ uiTab("updates", packagesUpdateOptions)
 
 dlg:tab({ id="installed", text=setTabName("installed", packagesUninstallOptions)})
 uiTab("installed", packagesUninstallOptions)
+
+dlg:tab({ id="settings",text="Settings"})
+:separator(" Settings ")
+:label({ text="Meta Data Uri"})
+:entry({ id = "metaDataUri", text = SETTINGS.metaDataUri})
+:check{ id="didAcceptWarning", label="", text= "I do understand that the external scripts installed with this may be harmful.", selected=SETTINGS.didAcceptWarning }
+:button({
+    text="Save settings",
+    selected=false,
+    focus=false,
+    onclick=function()
+        saveStringToFile(packageManagerSettingsPath, json.encode({
+            metaDataUri = dlg.data.metaDataUri,
+            didAcceptWarning = dlg.data.didAcceptWarning,
+        }), 'w+')
+        reloadWindow()
+    end
+})
+
+
 
 dlg:tab({ id="about",text="About"})
 :separator(" ABOUT ")
