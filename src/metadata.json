@@ -5,6 +5,7 @@
         "productUrl": "https://github.com/SignalFromTheStars/aseprite-package-manager",
         "downloadUrl": "file:////Users/diana/Documents/MvB/aseprite-package-manager/src/packages.lua",
         "scriptName": "Packages2.lua",
+        "category": "Manager",
         "version": "1.0.0",
         "license": "MIT",
         "description": "This Package Manager"
@@ -21,16 +22,6 @@
         "description": "Creates a new layer that looks like a glass floor flattening in the timeline."
     },
     {
-        "name": "Random Pallette",
-        "vendor": "Aseprite",
-        "downloadUrl": "https://raw.githubusercontent.com/aseprite/Aseprite-Script-Examples/refs/heads/main/Random%20Palette.lua",
-        "scriptName": "Random Pallet.lua",
-        "category": "Color",
-        "version": "1.0.0",
-        "license": "MIT",
-        "description": "Randomize colors in the palette."
-    },
-    {
         "name": "Virtual Camera Export System",
         "vendor": "CarbsCode",
         "productUrl": "https://carbscode.itch.io/vcam",
@@ -38,5 +29,335 @@
         "version": "1.0.0",
         "license": "Simple Usage License",
         "description": "Movable camera view on the action over the course of the animation."
+    },
+    {
+        "name": "BG Auto-Scroll Toolbar",
+        "vendor": "CarbsCode",
+        "productUrl": "https://carbscode.itch.io/bg-auto-scroll-toolbar",
+        "category": "Animation",
+        "version": "2.0.0",
+        "license": "Simple Usage License",
+        "description": "Quickly Animate A Scrolling / Parallax Background With Ease."
+    },
+    {
+        "name": "Slice by",
+        "vendor": "Molingyu",
+        "productUrl": "https://github.com/molingyu/AsepriteScript",
+        "downloadUrl": "https://raw.githubusercontent.com/molingyu/AsepriteScript/refs/heads/master/Slice%20by.lua",
+        "scriptName": "Slice by.lua",
+        "category": "Tool",
+        "version": "1.0.0",
+        "license": "MIT",
+        "description": "Sprite slice tool. Slice by cell size or count"
+    },
+    {
+        "name": "Displacement",
+        "vendor": "Heidi-Potato",
+        "productUrl": "https://github.com/Heidi-Potato/scripts-for-asesprite",
+        "downloadUrl": "https://raw.githubusercontent.com/Heidi-Potato/scripts-for-asesprite/refs/heads/master/displacement.lua",
+        "scriptName": "Displacement.lua",
+        "category": "Tool",
+        "version": "1.0.0",
+        "license": "MIT",
+        "description": "Shifts all pixels that succeed the probability test by at most the maximum amount of displacement specified"
+    },
+    {
+        "name": "toMillitext",
+        "vendor": "NullMember",
+        "productUrl": "https://github.com/NullMember/Aseprite-Millitext-Converter",
+        "downloadUrl": "https://raw.githubusercontent.com/NullMember/Aseprite-Millitext-Converter/refs/heads/master/toMillitext.lua",
+        "scriptName": "toMillitext.lua",
+        "category": "Color",
+        "version": "1.0.0",
+        "license": "MIT",
+        "description": "Converting strings to millitext or millitext image to human readable form"
+    },
+    {
+        "name": "fromMillitext",
+        "vendor": "NullMember",
+        "productUrl": "https://github.com/NullMember/Aseprite-Millitext-Converter",
+        "downloadUrl": "https://raw.githubusercontent.com/NullMember/Aseprite-Millitext-Converter/refs/heads/master/fromMillitext.lua",
+        "scriptName": "fromMillitext.lua",
+        "category": "Color",
+        "version": "1.0.0",
+        "license": "MIT",
+        "description": "Converting strings to millitext or millitext image to human readable form"
+    },
+    {
+        "name": "FastBit",
+        "vendor": "WolftrooperNo86",
+        "productUrl": "https://github.com/WolftrooperNo86/FastBit",
+        "downloadUrl": "https://raw.githubusercontent.com/WolftrooperNo86/FastBit/refs/heads/master/FastBit%20v1.2.lua",
+        "scriptName": "FastBit.lua",
+        "category": "Color",
+        "version": "1.2",
+        "license": "GPL-3.0",
+        "description": "A bit based color picker!"
+    },
+    {
+        "name": "Touchscreen Extension for Aseprite",
+        "vendor": "MaplePixels",
+        "productUrl": "https://maplepixels.itch.io/touchscreen-extension-for-aseprite",
+        "category": "Tool",
+        "version": "1.0.0",
+        "license": "Simple Usage License",
+        "description": "It gives helpful shortcuts for PC Tablet owners. "
+    },
+    {
+        "name": "FastBit",
+        "vendor": "WolftrooperNo86",
+        "productUrl": "https://github.com/WolftrooperNo86/FastBit",
+        "downloadUrl": "https://raw.githubusercontent.com/WolftrooperNo86/FastBit/refs/heads/master/FastBit%20v1.2.lua",
+        "scriptName": "FastBit.lua",
+        "category": "Color",
+        "version": "1.2",
+        "license": "GPL-3.0",
+        "description": "A bit based color picker!"
+    },
+    {
+        "name": "Gameboy Export",
+        "vendor": "Boombuler",
+        "productUrl": "https://github.com/boombuler/aseprite-gbexport",
+        "downloadUrl": "https://raw.githubusercontent.com/boombuler/aseprite-gbexport/refs/heads/master/GameboyExport.lua",
+        "scriptName": "GameboyExport.lua",
+        "category": "Export",
+        "version": "1.0.0",
+        "license": "MIT",
+        "description": "A bit based color picker!"
+    },
+    {
+        "name": "AseWave",
+        "vendor": "Ondra09",
+        "productUrl": "https://github.com/Ondra09/AseWave",
+        "downloadUrl": "https://raw.githubusercontent.com/Ondra09/AseWave/refs/heads/main/NormalSprite.lua",
+        "scriptName": "AseWave.lua",
+        "category": "Texture",
+        "version": "1.0.0",
+        "description": "Water & Clouds generation plugin for Aseprite editor."
+    },
+    {
+        "name": "Ghost Images",
+        "vendor": "davebarkeruk",
+        "productUrl": "https://github.com/davebarkeruk/Aseprite_LUA_Scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/davebarkeruk/Aseprite_LUA_Scripts/refs/heads/main/Ghost%20Images.lua",
+        "scriptName": "Ghost Images.lua",
+        "category": "Animation",
+        "version": "1.0.0",
+        "description": "Animation effect similar to onion skinning."
+    },
+    {
+        "name": "Layer Transition",
+        "vendor": "davebarkeruk",
+        "productUrl": "https://github.com/davebarkeruk/Aseprite_LUA_Scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/davebarkeruk/Aseprite_LUA_Scripts/refs/heads/main/Layer%20Transition.lua",
+        "scriptName": "Layer Transition.lua",
+        "category": "Animation",
+        "version": "1.0.0",
+        "description": "Generates a new layer with a simple transition effect between two existing layers."
+    },
+    {
+        "name": "Load Palette From CSV",
+        "vendor": "davebarkeruk",
+        "productUrl": "https://github.com/davebarkeruk/Aseprite_LUA_Scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/davebarkeruk/Aseprite_LUA_Scripts/refs/heads/main/Load%20Palette%20From%20CSV.lua",
+        "scriptName": "Load Palette From CSV.lua",
+        "category": "Color",
+        "version": "1.0.0",
+        "description": "Load a palette from a CSV file with red, green, blue, alpha columns."
+    },
+    {
+        "name": "Save Palette To CSV",
+        "vendor": "davebarkeruk",
+        "productUrl": "https://github.com/davebarkeruk/Aseprite_LUA_Scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/davebarkeruk/Aseprite_LUA_Scripts/refs/heads/main/Save%20Palette%20To%20CSV.lua",
+        "scriptName": "Save Palette To CSV.lua",
+        "category": "Color",
+        "version": "1.0.0",
+        "description": "Save current palette To CSV file with red, green, blue, alpha columns."
+    },
+    {
+        "name": "Selected Pixel Count",
+        "vendor": "davebarkeruk",
+        "productUrl": "https://github.com/davebarkeruk/Aseprite_LUA_Scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/davebarkeruk/Aseprite_LUA_Scripts/refs/heads/main/Selected%20Pixel%20Count.lua",
+        "scriptName": "Selected Pixel Count.lua",
+        "category": "Tool",
+        "version": "1.0.0",
+        "description": "Counts the number of pixels in an arbitrary shaped selection."
+    },
+    {
+        "name": "Particle Simulator",
+        "vendor": "davebarkeruk",
+        "productUrl": "https://github.com/davebarkeruk/Aseprite_LUA_Scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/davebarkeruk/Aseprite_LUA_Scripts/refs/heads/main/Particle%20Simulator.lua",
+        "scriptName": "Particle Simulator.lua",
+        "category": "Particle",
+        "version": "1.0.0",
+        "description": "A simple 2D particle simulation."
+    },
+    {
+        "name": "Particle Simulator Looped",
+        "vendor": "davebarkeruk",
+        "productUrl": "https://github.com/davebarkeruk/Aseprite_LUA_Scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/davebarkeruk/Aseprite_LUA_Scripts/refs/heads/main/Particle%20Simulator%20Looped.lua",
+        "scriptName": "Particle Simulator Looped.lua",
+        "category": "Particle",
+        "version": "1.0.0",
+        "description": "An alternative version of the particle simulation."
+    },
+    {
+        "name": "Center Selection On Canvas",
+        "vendor": "Geoff Beier",
+        "productUrl": "https://git.sr.ht/~tuxpup/asesprite-script-center-selection",
+        "downloadUrl": "https://git.sr.ht/~tuxpup/asesprite-script-center-selection/blob/master/CenterSelectionOnCanvas.lua",
+        "scriptName": "Center Selection On Canvas.lua",
+        "category": "Tool",
+        "version": "1.0.0",
+        "description": "Script that attempts to take the current selection and center it"
+    },
+    {
+        "name": "Bulk Import Sprite Sheets",
+        "vendor": "IgnacioLuxP",
+        "productUrl": "https://gist.github.com/IgnacioLuxP/906842a3f3a0dc33e4dee772cc3cf4fa",
+        "downloadUrl": "https://gist.githubusercontent.com/IgnacioLuxP/906842a3f3a0dc33e4dee772cc3cf4fa/raw/b2946153dc94df9fd1f38affd0b9ef488db0a6f2/BulkImportSpriteSheets.lua",
+        "scriptName": "Bulk Import Sprite Sheets.lua",
+        "category": "Import",
+        "version": "0.1",
+        "description": "Aseprite script to convert all open sprite sheets into sliced sprite sheets"
+    },
+    {
+        "name": "Grassify",
+        "vendor": "Thoof",
+        "productUrl": "https://github.com/Thoof/aseprite-grassify",
+        "downloadUrl": "https://raw.githubusercontent.com/Thoof/aseprite-grassify/refs/heads/main/Grassify.lua",
+        "scriptName": "Bulk Import Sprite Sheets.lua",
+        "category": "Texture",
+        "version": "1.0.0",
+        "description": "Making pixel grass"
+    },
+    {
+        "name": "square to isometric tile",
+        "vendor": "OpsisKalopsis",
+        "productUrl": "https://github.com/OpsisKalopsis/aseprite-scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/OpsisKalopsis/aseprite-scripts/refs/heads/main/square%20to%20isometric-tile.lua",
+        "scriptName": "Square to isometric tile.lua",
+        "category": "Isometric",
+        "version": "1.0.0",
+        "description": "Converts a square tile to an isometric tile."
+    },
+    {
+        "name": "square to isometric front",
+        "vendor": "OpsisKalopsis",
+        "productUrl": "https://github.com/OpsisKalopsis/aseprite-scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/OpsisKalopsis/aseprite-scripts/refs/heads/main/square%20to%20isometric-front.lua",
+        "scriptName": "Square to isometric front.lua",
+        "category": "Isometric",
+        "version": "1.0.0",
+        "description": "Converts a selection to an isometric front tile, like a wall."
+    },
+    {
+        "name": "square to isometric side",
+        "vendor": "OpsisKalopsis",
+        "productUrl": "https://github.com/OpsisKalopsis/aseprite-scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/OpsisKalopsis/aseprite-scripts/refs/heads/main/square%20to%20isometric-side.lua",
+        "scriptName": "Square to isometric side.lua",
+        "category": "Isometric",
+        "version": "1.0.0",
+        "description": "Converts a selection to an isometric side tile, like a wall."
+    },
+    {
+        "name": "Isometric helper",
+        "vendor": "OpsisKalopsis",
+        "productUrl": "https://github.com/OpsisKalopsis/aseprite-scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/OpsisKalopsis/aseprite-scripts/refs/heads/main/isometric%20helper.lua",
+        "scriptName": "Isometric helper.lua",
+        "category": "Tool",
+        "version": "1.0.0",
+        "description": "Handy toolbar for OpsisKalopsis isometric packages"
+    },
+    {
+        "name": "Isometric tileset export",
+        "vendor": "OpsisKalopsis",
+        "productUrl": "https://github.com/OpsisKalopsis/aseprite-scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/OpsisKalopsis/aseprite-scripts/refs/heads/main/iso%20tileset%20export.lua",
+        "scriptName": "Isometric tileset export.lua",
+        "category": "Export",
+        "version": "1.0.0",
+        "description": "Export an whole image to isometric tiles."
+    },
+    {
+        "name": "makeNoise",
+        "vendor": "Willow Willis",
+        "productUrl": "https://shemake.dev/tech/viewing/Aseprite_makeNoise",
+        "downloadUrl": "https://shemake.dev/tech/docs/makeNoise.lua",
+        "scriptName": "makeNoise.lua",
+        "category": "Texture",
+        "version": "1.0.0",
+        "description": "Creates a new layer with random noise."
+    },
+    {
+        "name": "findOrphans",
+        "vendor": "Willow Willis",
+        "productUrl": "https://shemake.dev/tech/viewing/Aseprite_makeNoise",
+        "downloadUrl": "https://shemake.dev/tech/docs/findOrphans.lua",
+        "scriptName": "makeNoise.lua",
+        "category": "Tool",
+        "version": "1.0.0",
+        "description": "Find orphan pixels."
+    },
+    {
+        "name": "Custom brush options",
+        "vendor": "Thoof",
+        "productUrl": "https://github.com/Thoof/aseprite-custombrushoptions",
+        "downloadUrl": "https://raw.githubusercontent.com/Thoof/aseprite-custombrushoptions/refs/heads/main/CustomBrushOptions.lua",
+        "scriptName": "Custom brush options.lua",
+        "category": "Brush",
+        "version": "1.0.0",
+        "description": "Custom brushes"
+    },
+    {
+        "name": "Opacity animation fade",
+        "vendor": "Frxedlxver",
+        "productUrl": "https://github.com/frxedlxver/aseprite-opacity-animation-tool/blob/main/opacity%20animation.lua",
+        "downloadUrl": "https://raw.githubusercontent.com/frxedlxver/aseprite-opacity-animation-tool/refs/heads/main/opacity%20animation.lua",
+        "scriptName": "Opacity animation fade.lua",
+        "category": "Animation",
+        "version": "1.0.0",
+        "description": "Generate fade animations using keyframes (via cel opacity)."
+    },
+    {
+        "name": "Timeline Modifier",
+        "vendor": "Saruzoru",
+        "productUrl": "https://saruzoru.itch.io/aseprite-timeline-modifier",
+        "scriptName": "Timeline Modifier.lua",
+        "category": "Animation",
+        "version": "1.0.0",
+        "description": "Edit frame length of an animation visually and allows you to modify the duration with a slider."
+    },
+    {
+        "name": "Majority Downsizer",
+        "vendor": "TheGha",
+        "productUrl": "https://github.com/TheGha/AsepriteMajorityDownsizer",
+        "downloadUrl": "https://raw.githubusercontent.com/TheGha/AsepriteMajorityDownsizer/refs/heads/main/MajorityDownsize.lua",
+        "scriptName": "Majority Downsizer.lua",
+        "category": "Image",
+        "version": "1.0.0",
+        "description": "Replaces all images (all cells with trimming included) in a sprite and downsizes them"
+    },
+    {
+        "name": "Amiga OCS/ECS Color Palette Mixer",
+        "vendor": "Prismaticrealms",
+        "productUrl": "https://prismaticrealms.itch.io/aseprite-script-amiga-ocsecs-color-palette-mixer",
+        "category": "Color",
+        "version": "1.0.0",
+        "description": "The palette mixer supports 2, 4, 8, 16, 32 and 64 (Extra HalfBrite) colour palettes."
+    },
+    {
+        "name": "Amiga IFF/ILBM Exporter",
+        "vendor": "Prismaticrealms",
+        "productUrl": "https://prismaticrealms.itch.io/aseprite-script-amiga-iffilbm-exporter",
+        "category": "Export",
+        "version": "1.2",
+        "description": "Export your creation to an IFF/ILBM file"
     }
 ]

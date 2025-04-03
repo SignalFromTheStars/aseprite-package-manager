@@ -206,6 +206,7 @@ local function getKeys(tbl)
     for key, _ in pairs(tbl) do
         table.insert(keys, key)
     end
+    table.sort(keys)
     return keys
 end
 
@@ -298,7 +299,7 @@ local function processMetaData()
             license = pkg.license,
             description = pkg.description,
             -- extend
-            keyName = pkg.vendor .. " : " .. pkg.name,
+            keyName = pkg.category .. " - " .. pkg.vendor .. " : " .. pkg.name,
             scriptPath = packageScriptPath,
             isInstalled = app.fs.isFile(packageScriptPath),
             haveUpdate = false,
