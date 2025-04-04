@@ -1,6 +1,6 @@
 # Aseprite Package Manager
 
-
+Wip
 
 # TODO
 - [x] install packages
@@ -10,10 +10,7 @@
 - [x] website url meta data
 - [x] not possible to download anymore (only localhost)
 - [x] update package manager
-- [ ] support zips like 
-    - https://github.com/behreajj/AsepriteAddons/tree/main
-    - https://github.com/PKGaspi/AsepriteScripts
-    - https://github.com/AlanFromJapan/gbdk-sprite-exporter
+- [ ] support zip files 
 - [x] fill metadata.json scripts
 - [ ] linter
 - [ ] lua check
