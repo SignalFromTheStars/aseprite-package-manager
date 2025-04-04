@@ -4,9 +4,9 @@
 
 # Installation
 
-1. In *Aseprite*, open the *Scripts* folder: File > Scripts > Open Scripts Folder.
-2. Copy the downloaded [src/Package Manager.lua](https://github.com/SignalFromTheStars/aseprite-package-manager/blob/main/src/Package%20Manager.lua) file into the Scripts folder.
-3. Restart Aseprite to load 'Package Manager', or use the *Scripts* menu to refresh the scripts for immediate availability.
+1. In **Aseprite**, open the **Scripts** folder: File > Scripts > Open Scripts Folder.
+2. Copy the downloaded [src/Package Manager.lua](https://github.com/SignalFromTheStars/aseprite-package-manager/blob/main/src/Package%20Manager.lua) file into the Scripts folder (only that file is needed!).
+3. Restart Aseprite to load **'Package Manager'**, or use the **Scripts** menu to refresh the scripts for immediate availability.
 
 # TODO
 - [x] install packages
