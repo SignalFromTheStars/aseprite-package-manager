@@ -18,15 +18,16 @@
 - [x] website url meta data
 - [x] not possible to download anymore (only localhost)
 - [x] update package manager
-- [ ] support zip files 
 - [x] fill metadata.json scripts
-- [ ] linter
-- [ ] lua check
 - [x] rename root script
 - [x] live url
 - [x] repo not private anymore
 - [x] test windows
+- [x] test mac
+- [x] update this readme
+- [ ] support zip files 
+- [ ] linter
+- [ ] lua check
 - [ ] test ubuntu
-- [ ] update this readme
 - [ ] publish website topic
 - [ ] publish aseprite forum
