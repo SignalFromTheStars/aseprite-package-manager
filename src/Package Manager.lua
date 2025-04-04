@@ -80,7 +80,7 @@ if not app.fs.isDirectory(scriptsDir) then
     return
 end
 
-local packageManagerDir = app.fs.joinPath(scriptsDir, "Package Manager") 
+local packageManagerDir = app.fs.joinPath(scriptsDir, "Packages") 
 if not app.fs.isDirectory(packageManagerDir) then
     app.fs.makeDirectory(packageManagerDir)
 end

@@ -1,3 +1,7 @@
+# Aseprite Package Manager
+
+
+
 # TODO
 - [x] install packages
 - [x] uninstall packages
@@ -13,9 +17,9 @@
 - [x] fill metadata.json scripts
 - [ ] linter
 - [ ] lua check
-- [ ] rename root script
-- [ ] live url
-- [ ] repo not private anymore
+- [x] rename root script
+- [x] live url
+- [x] repo not private anymore
 - [ ] test windows
 - [ ] test ubuntu
 - [ ] update this readme
