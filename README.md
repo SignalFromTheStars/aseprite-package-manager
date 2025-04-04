@@ -10,7 +10,7 @@
     - https://github.com/behreajj/AsepriteAddons/tree/main
     - https://github.com/PKGaspi/AsepriteScripts
     - https://github.com/AlanFromJapan/gbdk-sprite-exporter
-- [ ] fill metadata.json scripts
+- [x] fill metadata.json scripts
 - [ ] linter
 - [ ] lua check
 - [ ] rename root script

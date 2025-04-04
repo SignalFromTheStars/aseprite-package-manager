@@ -90,7 +90,7 @@ local SETTINGS = readJson(packageManagerSettingsPath)
 if not SETTINGS then
     -- create default settings
     SETTINGS = {
-        metaDataUri = "file:////Users/diana/Documents/MvB/aseprite-package-manager/src/metadata.json",
+        metaDataUri = "https://raw.githubusercontent.com/SignalFromTheStars/aseprite-package-manager/refs/heads/main/src/metadata.json",
         didAcceptWarning = false
     }
     saveStringToFile(packageManagerSettingsPath, json.encode(SETTINGS), 'w+')

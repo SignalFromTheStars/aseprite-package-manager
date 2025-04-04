@@ -3,7 +3,7 @@
         "name": "Package Mangager",
         "vendor": "Signal From The Stars",
         "productUrl": "https://github.com/SignalFromTheStars/aseprite-package-manager",
-        "downloadUrl": "file:////Users/diana/Documents/MvB/aseprite-package-manager/src/packages.lua",
+        "downloadUrl": "https://raw.githubusercontent.com/SignalFromTheStars/aseprite-package-manager/refs/heads/main/src/Package%20Manager.lua",
         "scriptName": "Packages2.lua",
         "category": "Manager",
         "version": "1.0.0",
@@ -359,5 +359,161 @@
         "category": "Export",
         "version": "1.2",
         "description": "Export your creation to an IFF/ILBM file"
+    },
+    {
+        "name": "Export Animation",
+        "vendor": "NepiMwewa",
+        "productUrl": "https://github.com/NepiMwewa/aseprite-tools",
+        "downloadUrl": "https://raw.githubusercontent.com/NepiMwewa/aseprite-tools/refs/heads/main/Animation%20Export%20Groups%2C%20Layers%20%26%20Tags/Export%20Animation.lua",
+        "scriptName": "Export Animation.lua",
+        "category": "Animation",
+        "version": "1.0.0",
+        "description": "Export each tag into a different sprite sheet"
+    },
+    {
+        "name": "Sliding",
+        "vendor": "accodius",
+        "productUrl": "https://accodius.itch.io/aseprite-sliding",
+        "category": "Animation",
+        "version": "1.0.0",
+        "description": "Automatically generate hundreds of frames of moving objects in 1 click"
+    },
+    {
+        "name": "Palettize",
+        "vendor": "projectitis",
+        "productUrl": "https://github.com/projectitis/aseprite-script-palettize",
+        "downloadUrl": "https://raw.githubusercontent.com/projectitis/aseprite-script-palettize/refs/heads/main/palettize.lua",
+        "scriptName": "Palettize.lua",
+        "category": "Color",
+        "version": "1.0.0",
+        "description": "Export each tag into a different sprite sheet"
+    },
+    {
+        "name": "DNSExporter",
+        "vendor": "jvornhagen",
+        "productUrl": "https://github.com/jvornhagen/DoomStyleSpriteExporterForAseprite/blob/main/DNSExporter.lua",
+        "downloadUrl": "https://raw.githubusercontent.com/jvornhagen/DoomStyleSpriteExporterForAseprite/refs/heads/main/DNSExporter.lua",
+        "scriptName": "DNSExporter.lua",
+        "category": "Export",
+        "version": "1.0.0",
+        "description": "Automatically export Aseprite animations as a series of images named in the Doom naming style."
+    },
+    {
+        "name": "Layer Searcher",
+        "vendor": "jay7895214",
+        "productUrl": "https://github.com/jay7895214/aseprite-layer-searcher",
+        "downloadUrl": "https://raw.githubusercontent.com/jay7895214/aseprite-layer-searcher/refs/heads/main/aesprite%20layer%20searcher.lua",
+        "scriptName": "Layer Searcher.lua",
+        "category": "Tool",
+        "version": "1.0.0",
+        "description": "Searching layer names in Aseprite using keywords."
+    },
+    {
+        "name": "Bmp Export",
+        "vendor": "behreajj",
+        "productUrl": "https://github.com/behreajj/AseBmpExport",
+        "downloadUrl": "https://raw.githubusercontent.com/behreajj/AseBmpExport/refs/heads/main/bmpExport.lua",
+        "scriptName": "Bmp Export.lua",
+        "category": "Export",
+        "version": "1.0.0",
+        "description": "Export bmp."
+    },
+    {
+        "name": "Multi Replacer Color",
+        "vendor": "goustkor",
+        "productUrl": "https://github.com/goustkor/Aseprite-Scripts/",
+        "downloadUrl": "https://raw.githubusercontent.com/goustkor/Aseprite-Scripts/refs/heads/master/Scripts/MultiReplacerColor.lua",
+        "scriptName": "Multi Replacer Color.lua",
+        "category": "Color",
+        "version": "1.0.0",
+        "description": "Replace colors"
+    },
+    {
+        "name": "Timer",
+        "vendor": "goustkor",
+        "productUrl": "https://github.com/goustkor/Aseprite-Scripts/",
+        "downloadUrl": "https://raw.githubusercontent.com/goustkor/Aseprite-Scripts/refs/heads/master/Scripts/Timer.lua",
+        "scriptName": "Timer.lua",
+        "category": "Tool",
+        "version": "1.0.0",
+        "description": "Replace colors"
+    },
+    {
+        "name": "Reduce Frames",
+        "vendor": "ectodrop",
+        "productUrl": "https://github.com/ectodrop/Aseprite-Scripts",
+        "downloadUrl": "https://raw.githubusercontent.com/ectodrop/Aseprite-Scripts/refs/heads/main/Reduce%20Frames.lua",
+        "scriptName": "Reduce Frames.lua",
+        "category": "Animation",
+        "version": "1.0.0",
+        "description": "Deleting large chunks of frames in steps"
+    },
+    {
+        "name": "Tag Names",
+        "vendor": "harpwood",
+        "productUrl": "https://gist.github.com/harpwood/ec069186b9cca5455e2d4b7fcb6d0fc5",
+        "downloadUrl": "https://gist.githubusercontent.com/harpwood/ec069186b9cca5455e2d4b7fcb6d0fc5/raw/f3d39f2d0d7c8cd2d4694273268ec5d6e28b935c/Tag%2520Names%2520Exporter.lua",
+        "scriptName": "Tag Names Exporter.lua",
+        "category": "Export",
+        "version": "1.0.0",
+        "description": "Export animation tag names"
+    },
+    {
+        "name": "AseFlixel",
+        "vendor": "harpwood",
+        "productUrl": "https://github.com/harpwood/AseFlixel",
+        "downloadUrl": "https://raw.githubusercontent.com/harpwood/AseFlixel/refs/heads/main/AseFlixel.lua",
+        "scriptName": "AseFlixel.lua",
+        "category": "Export",
+        "version": "1.0.0",
+        "description": "Aseprite Animation Code Generator for HaxeFlixel"
+    },
+    {
+        "name": "Shading 4.0",
+        "vendor": "hoelzlmanuel",
+        "productUrl": "https://github.com/hoelzlmanuel/aseprite-color-shading",
+        "downloadUrl": "https://raw.githubusercontent.com/hoelzlmanuel/aseprite-color-shading/refs/heads/main/Color%20Shading%20v4.0.lua",
+        "scriptName": "Shading.lua",
+        "category": "Color",
+        "version": "4.0.0",
+        "description": "Dynamic palette picker window with relevant color shading options"
+    },
+    {
+        "name": "Shuffle",
+        "vendor": "increpare",
+        "productUrl": "https://gist.github.com/increpare/ea0c175b87dc362b136b70f336413dbb",
+        "downloadUrl": "https://gist.githubusercontent.com/increpare/ea0c175b87dc362b136b70f336413dbb/raw/50f4ce9face580414c29f2fdba8d8a3cb8ec5315/permute_palette_colours.lua",
+        "scriptName": "Shuffle.lua",
+        "category": "Color",
+        "version": "1.0.0",
+        "description": "Permute/shuffle the colour palette"
+    },
+    {
+        "name": "Grayscale preview",
+        "vendor": "increpare",
+        "productUrl": "https://hitsuji-baah.itch.io/aseprite-grayscale-preview",
+        "category": "Color",
+        "version": "1.0.0",
+        "description": "Grayscale preview"
+    },
+    {
+        "name": "Color Blind Simulator",
+        "vendor": "nahianabir",
+        "productUrl": "https://github.com/nahianabir/Aseprite-Color-Blind-Simulator",
+        "downloadUrl": "https://raw.githubusercontent.com/nahianabir/Aseprite-Color-Blind-Simulator/refs/heads/main/Color%20Blind%20Simulator.lua",
+        "scriptName": "Color Blind Simulator.lua",
+        "category": "Tool",
+        "version": "1.0.0",
+        "description": "Only works for background layer"
+    },
+    {
+        "name": "ico cur ani export",
+        "vendor": "Tsukina-7mochi",
+        "productUrl": "https://github.com/Tsukina-7mochi/aseprite-scripts/tree/master/icon-and-cursor",
+        "downloadUrl": "https://raw.githubusercontent.com/Tsukina-7mochi/aseprite-scripts/refs/heads/master/icon-and-cursor/Export%20as%20ico%20cur%20ani.lua",
+        "scriptName": "ico cur ani export.lua",
+        "category": "Export",
+        "version": "1.0.0",
+        "description": "Exports sprite as windows icon and cursor files, .ico and .cur, .ani"
     }
 ]
