@@ -293,6 +293,7 @@ local function processMetaData()
             name = pkg.name,
             vendor = pkg.vendor,
             downloadUrl = pkg.downloadUrl,
+            productUrl = pkg.productUrl,
             scriptName = pkg.scriptName,
             category = pkg.category,
             version = pkg.version,
@@ -338,7 +339,7 @@ end
 
 local function reloadWindow()
     dlg:close()
-    app.command.RunScript({filename = app.fs.joinPath(scriptsDir, "packages.lua") })
+    app.command.RunScript({filename = app.fs.joinPath(scriptsDir, "Package Manager.lua") })
 end
 
 -- id == package , updates, installed
