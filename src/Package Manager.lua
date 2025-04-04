@@ -7,6 +7,11 @@ if not app.isUIAvailable then
     return
 end
 
+if not json then
+    app.alert("Update Aseprite to the latest version, json lib not found.")
+    return
+end
+
 local function isCommandAvailable(command)
     return os.execute(command .. " --version 2>&1")
 end
@@ -116,7 +121,7 @@ local function downloadFile(url, savePath)
     local command
 
     if DOWNLOADER == "powershell" then
-        command = string.format('powershell -Command "Invoke-WebRequest -Uri \"%s\" -OutFile \"%s\""', url, savePath)
+        command = string.format('powershell -Command "Invoke-WebRequest -Uri \'%s\' -OutFile \'%s\'"', url, savePath)
     elseif DOWNLOADER == "curl" then
         command = string.format('curl -L -o "%s" "%s"', savePath, url)
     elseif DOWNLOADER == "wget" then
@@ -141,7 +146,7 @@ local function postRequest(url, jsonStr)
     local command
 
     if DOWNLOADER == "powershell" then
-        command = string.format('powershell -Command "Invoke-RestMethod -Uri \"%s\" -Method Post -Body %s -ContentType \"application/json\""', url, jsonStr)
+        command = string.format('powershell -Command "Invoke-RestMethod -Uri \'%s\' -Method Post -Body \'%s\' -ContentType \'application/json\'"', url, jsonStr)
     elseif DOWNLOADER == "curl" then
         command = string.format("curl -X POST -H 'Content-Type: application/json' -d '%s' '%s'", jsonStr, url)
     else 

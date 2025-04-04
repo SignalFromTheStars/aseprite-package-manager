@@ -23,7 +23,7 @@
 - [x] rename root script
 - [x] live url
 - [x] repo not private anymore
-- [ ] test windows
+- [x] test windows
 - [ ] test ubuntu
 - [ ] update this readme
 - [ ] publish website topic
