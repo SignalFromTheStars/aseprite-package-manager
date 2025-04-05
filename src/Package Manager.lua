@@ -142,23 +142,29 @@ local function downloadFile(url, savePath)
     return false
 end
 
+local function url_encode(str)
+    return (str:gsub("([^%w _%%%-%.~])", function(c)
+      return string.format("%%%02X", string.byte(c))
+    end):gsub(" ", "+"))
+  end
+
 local function postRequest(url, jsonStr)
-    local command
-
     if DOWNLOADER == "powershell" then
-        command = string.format('powershell -Command "Invoke-RestMethod -Uri \'%s\' -Method Post -Body \'%s\' -ContentType \'application/json\'"', url, jsonStr)
-    elseif DOWNLOADER == "curl" then
-        command = string.format("curl -X POST -H 'Content-Type: application/json' -d '%s' '%s'", jsonStr, url)
-    else 
-        app.alert("Cannot find a POST request tool like `curl`, or `powershell`, see the about tab and use git pull request")
-        return
-    end
-
-    local result = os.execute(command)
-    if result then
+        -- this is not working, create a ugly GET request using the browser
+        -- command = string.format('powershell -Command "Invoke-RestMethod -Uri \'%s\' -Method Post -Body \'%s\' -ContentType \'application/json\'"', url, jsonStr)
+        openBrowser(url .. "?data=" .. url_encode(jsonStr))
         return true
+    elseif DOWNLOADER == "curl" then
+        local command = string.format("curl -X POST -H 'Content-Type: application/json' -d '%s' '%s'", jsonStr, url)
+        local result = os.execute(command)
+        if result then
+            return true
+        else
+            app.alert("POST Request Failed")
+        end
     else
-        app.alert("POST Request Failed")
+        openBrowser(url .. "?data=" .. url_encode(jsonStr))
+        return true
     end
 
     return false
