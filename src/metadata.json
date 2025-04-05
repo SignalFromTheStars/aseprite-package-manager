@@ -6,7 +6,7 @@
         "downloadUrl": "https://raw.githubusercontent.com/SignalFromTheStars/aseprite-package-manager/refs/heads/main/src/Package%20Manager.lua",
         "scriptName": "Package Manager.lua",
         "category": "Manager",
-        "version": "1.0.1",
+        "version": "1.0.2",
         "license": "MIT",
         "description": "This Package Manager"
     },

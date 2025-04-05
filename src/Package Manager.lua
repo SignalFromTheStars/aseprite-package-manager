@@ -1,8 +1,6 @@
 -- Package Manager
+-- https://github.com/SignalFromTheStars/aseprite-package-manager
 --
--- version: 1.0.0
--- remote: https://github.com/SignalFromTheStars/aseprite-package-manager
-------------------------------------------------------------
 if not app.isUIAvailable then
     return
 end
@@ -67,7 +65,7 @@ local function readFileToString(filename)
     if not file then
         return false
     end
-    local content = file:read("*all") 
+    local content = file:read("*all")
     file:close()
     return content
 end
@@ -85,7 +83,7 @@ if not app.fs.isDirectory(scriptsDir) then
     return
 end
 
-local packageManagerDir = app.fs.joinPath(scriptsDir, "Packages") 
+local packageManagerDir = app.fs.joinPath(scriptsDir, "Packages")
 if not app.fs.isDirectory(packageManagerDir) then
     app.fs.makeDirectory(packageManagerDir)
 end
@@ -131,7 +129,6 @@ local function downloadFile(url, savePath)
         return
     end
 
-    -- download the file
     local result = os.execute(command)
     if result then
         return true
@@ -146,7 +143,7 @@ local function url_encode(str)
     return (str:gsub("([^%w _%%%-%.~])", function(c)
       return string.format("%%%02X", string.byte(c))
     end):gsub(" ", "+"))
-  end
+end
 
 local function postRequest(url, jsonStr)
     if DOWNLOADER == "powershell" then
@@ -166,12 +163,10 @@ local function postRequest(url, jsonStr)
         openBrowser(url .. "?data=" .. url_encode(jsonStr))
         return true
     end
-
     return false
 end
 
-
--- in use for install and update (they are the same)
+-- in use for install and update (they do the same)
 local function installScript(package)
     local scriptPathDir = app.fs.filePath(package.scriptPath)
     if not app.fs.isDirectory(scriptPathDir) then
@@ -195,8 +190,8 @@ local function uninstallScript(package)
     end
 
     -- remove the local metadata
-    removeFile(package.scriptPath .. ".json") 
-    
+    removeFile(package.scriptPath .. ".json")
+
     -- remove the dir when empty
     local scriptPathDir = app.fs.filePath(package.scriptPath)
     local otherScriptsInPath = app.fs.listFiles(scriptPathDir)
@@ -210,7 +205,7 @@ local function uninstallScript(package)
 end
 
 local function getKeys(tbl)
-    if tbl == nil then 
+    if tbl == nil then
         return {}
     end
     local keys = {}
@@ -290,7 +285,7 @@ local function processMetaData()
 
     for i, pkg in ipairs(metaData) do
         local packageScriptPath = app.fs.joinPath(packageManagerDir, pkg.category, pkg.scriptName)
-        if pkg.name == "Package Mangager" then
+        if pkg.name == "Package Manager" then
             -- special case
             packageScriptPath = app.fs.joinPath(scriptsDir, pkg.scriptName)
         end
@@ -319,11 +314,16 @@ local function processMetaData()
         }
 
         if packageData.isInstalled then
+            -- special case, after installing the initial Package Manager script
+            if packageData.name == "Package Manager" and not app.fs.isFile(packageData.scriptPath .. ".json") then
+              saveStringToFile(packageData.scriptPath .. ".json", json.encode(packageData), 'w+')
+            end
+
             -- maybe this package do have a update
             local localPackageMetaDataJson = readFileToString(packageData.scriptPath .. ".json")
             if localPackageMetaDataJson then
                 packageData.localData = json.decode(localPackageMetaDataJson)
-                if packageData.localData then           
+                if packageData.localData then
                     -- maybe it have a update
                     if pkg.version and packageData.localData and packageData.localData.version ~= pkg.version then
                         packagesUpdateOptions[packageData.keyName] = packageData
@@ -438,8 +438,6 @@ dlg:tab({ id="settings",text="Settings"})
         reloadWindow()
     end
 })
-
-
 
 dlg:tab({ id="submit",text="Submit"})
 :entry({ id = "submitVendor", label="Vendor*", text = ""})
