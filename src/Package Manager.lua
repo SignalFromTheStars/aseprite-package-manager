@@ -56,8 +56,10 @@ end
 
 local function saveStringToFile(filename, str, mode)
     local file = io.open(filename, mode)
-    file:write(str)
-    file:close()
+    if file then
+        file:write(str)
+        file:close()
+    end
 end
 
 local function readFileToString(filename)
@@ -523,7 +525,7 @@ dlg:newrow{ always=true }
     focus=false,
     onclick=function()
         openBrowser("https://www.instagram.com/signalfromthestars")
-    end 
+    end
 })
 :separator(" BUGS ")
 :label({ label="", text="Visit the the github page and/or try to update the Package Manager" })
@@ -533,7 +535,7 @@ dlg:newrow{ always=true }
     focus=false,
     onclick=function()
         openBrowser("https://github.com/SignalFromTheStars/aseprite-package-manager")
-    end 
+    end
 })
 
 dlg:endtabs()

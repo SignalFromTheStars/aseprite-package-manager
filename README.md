@@ -26,8 +26,8 @@
 - [x] test mac
 - [x] update this readme
 - [ ] support zip files 
-- [ ] linter
-- [ ] lua check
+- [x] linter
+- [x] lua check
 - [ ] test ubuntu
 - [ ] publish website topic
-- [ ] publish aseprite forum
+- [x] publish aseprite forum
