@@ -525,5 +525,13 @@
         "category": "Export",
         "version": "1.3.2",
         "description": "Exports as psd"
+    },
+    {
+        "name": "Reflecto",
+        "vendor": "devkidd",
+        "productUrl": "https://devkidd.itch.io/reflecto",
+        "category": "Tool",
+        "version": "1.0.0",
+        "description": "Automatically creates vertical reflections of your sprite artwork in just a click"
     }
 ]
