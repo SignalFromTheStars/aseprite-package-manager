@@ -533,5 +533,15 @@
         "category": "Tool",
         "version": "1.0.0",
         "description": "Automatically creates vertical reflections of your sprite artwork in just a click"
+    },
+    {
+        "name": "AseDiagrams",
+        "vendor": "behreandtjeremy",
+        "productUrl": "https://github.com/behreajj/AseDiagrams",
+        "downloadUrl": "https://raw.githubusercontent.com/behreajj/AseDiagrams/refs/heads/main/genDiagram.lua",
+        "scriptName": "genDiagram.lua",
+        "category": "Tool",
+        "version": "1.0.0",
+        "description": "Diagram Generator"
     }
 ]
